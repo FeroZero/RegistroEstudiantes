@@ -1,6 +1,6 @@
 package edu.ucne.myapplication.presentation.estudiantes.edit
 
-class EditTaskUiState(
+class EditEstudianteUiState(
     val estudianteId: Int? = null,
     val nombres: String = "",
     val email: String = "",
