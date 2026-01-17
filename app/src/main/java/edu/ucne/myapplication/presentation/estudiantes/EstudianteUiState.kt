@@ -1,6 +1,6 @@
-package edu.ucne.myapplication.presentation.estudiantes.edit
-
-class EditEstudianteUiState(
+package edu.ucne.myapplication.presentation.estudiantes
+class EstudianteUiState(
+    
     val estudianteId: Int? = null,
     val nombres: String = "",
     val email: String = "",
