@@ -7,8 +7,9 @@ import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
 import edu.ucne.myapplication.domain.estudiantes.repository.EstudianteRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class EstudianteRepositoryImpl(
+class EstudianteRepositoryImpl @Inject constructor(
     private val dao: EstudianteDao
 ) : EstudianteRepository {
     override fun observeEstudiante(): Flow<List<Estudiante>> = dao.observeALL().map { list ->
