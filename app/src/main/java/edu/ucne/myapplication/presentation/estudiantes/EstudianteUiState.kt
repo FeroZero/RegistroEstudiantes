@@ -1,10 +1,14 @@
 package edu.ucne.myapplication.presentation.estudiantes
-class EstudianteUiState(
-    
+
+import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
+
+data class EstudianteUiState(
+
     val estudianteId: Int? = null,
     val nombres: String = "",
     val email: String = "",
     val edad: Int? = null,
+    val estudiantes: List<Estudiante> = emptyList(),
     val nombresError: String? = null,
     val emailError: String? = null,
     val edadError: String? = null,
