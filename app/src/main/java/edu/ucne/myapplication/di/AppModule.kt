@@ -32,6 +32,7 @@ abstract class AppModule {
 
         @Provides
         fun provideEstudianteDao(db: EstudianteDb) = db.estudianteDao()
+        @Provides
         fun provideAsignaturaDao(db: EstudianteDb) = db.asignaturaDao()
     }
     @Binds
