@@ -36,6 +36,7 @@ fun myapplicacionNavHost(
                 state = state
             )
         }
+
         composable<Screen.Estudiante> {
             EstudianteScreen(
                 viewModel = viewModel,

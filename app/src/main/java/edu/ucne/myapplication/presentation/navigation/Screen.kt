@@ -7,4 +7,5 @@ sealed class Screen {
     data object EstudianteList : Screen()
     @Serializable
     data class Estudiante(val id: Int) : Screen()
+
 }
