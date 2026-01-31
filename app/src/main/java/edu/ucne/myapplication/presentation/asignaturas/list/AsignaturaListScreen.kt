@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -153,4 +154,21 @@ fun AsignaturaItem(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun AsignaturaListBodyPreview() {
+    val state = AsignaturaListUiState(
+        asignaturas = listOf(
+            Asignatura(asignaturaId = 1, codigo = "MAT-101", nombre = "Matemáticas I", aula = "A-21", creditos = "4"),
+            Asignatura(asignaturaId = 2, codigo = "PRO-202", nombre = "Programación II", aula = "L-05", creditos = "3")
+        )
+    )
+    AsignaturaListBody(
+        state = state,
+        onEvent = {},
+        onDrawer = {},
+        onNavigateToCreate = {},
+        onNavigateToEdit = {}
+    )
 }
