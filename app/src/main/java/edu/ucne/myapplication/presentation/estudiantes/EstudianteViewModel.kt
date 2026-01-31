@@ -1,16 +1,17 @@
 package edu.ucne.myapplication.presentation.estudiantes
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
-import edu.ucne.myapplication.domain.estudiantes.usecase.DeleteEstudianteUseCase
-import edu.ucne.myapplication.domain.estudiantes.usecase.GetEstudianteUseCase
-import edu.ucne.myapplication.domain.estudiantes.usecase.ObserveEstudianteUseCase
-import edu.ucne.myapplication.domain.estudiantes.usecase.UpsertEstudianteUseCase
-import edu.ucne.myapplication.domain.estudiantes.usecase.validateEdad
-import edu.ucne.myapplication.domain.estudiantes.usecase.validateEmail
-import edu.ucne.myapplication.domain.estudiantes.usecase.validateNombres
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.DeleteEstudianteUseCase
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.GetEstudianteUseCase
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.ObserveEstudianteUseCase
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.UpsertEstudianteUseCase
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.validateEdad
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.validateEmail
+import edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes.validateNombres
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
@@ -19,10 +20,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class EstudianteUiViewModel @Inject constructor(
-    private val getEstudianteUseCase: GetEstudianteUseCase,    private val upsertEstudianteUseCase: UpsertEstudianteUseCase,
+class EstudianteViewModel @Inject constructor(
+    private val getEstudianteUseCase: GetEstudianteUseCase,
+    private val upsertEstudianteUseCase: UpsertEstudianteUseCase,
     private val deleteEstudianteUseCase: DeleteEstudianteUseCase,
     private val observeEstudianteUseCase: ObserveEstudianteUseCase,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(EstudianteUiState())
@@ -33,6 +36,12 @@ class EstudianteUiViewModel @Inject constructor(
             observeEstudianteUseCase().collect { lista ->
                 _state.update { it.copy(estudiantes = lista) }
             }
+        }
+        val id: Int? = savedStateHandle["id"]
+        if (id != null && id > 0) {
+            onLoad(id)
+        } else {
+            onEvent(EstudianteUiEvent.New)
         }
     }
     private fun validar(): Boolean {

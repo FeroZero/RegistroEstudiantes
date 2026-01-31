@@ -1,6 +1,5 @@
-package edu.ucne.myapplication.domain.estudiantes.usecase
+package edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes
 
-import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
 import edu.ucne.myapplication.domain.estudiantes.repository.EstudianteRepository
 import javax.inject.Inject
 
