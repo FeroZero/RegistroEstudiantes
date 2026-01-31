@@ -21,7 +21,7 @@ class AsignaturaRepositoryImpl @Inject constructor(
 
     override suspend fun upsert(asignatura: Asignatura): Int {
         dao.upsert(entity = asignatura.toEntity())
-        return asignatura.AsignaturaId ?: 0
+        return asignatura.asignaturaId ?: 0
     }
 
     override suspend fun delete(id: Int) {
