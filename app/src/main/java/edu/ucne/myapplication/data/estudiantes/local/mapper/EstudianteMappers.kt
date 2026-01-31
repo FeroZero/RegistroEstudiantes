@@ -15,4 +15,4 @@ fun Estudiante.toEntity(): EstudianteEntity = EstudianteEntity(
     nombres = nombres,
     email = email,
     edad = edad
-)
+)   

@@ -1,11 +1,32 @@
-package edu.ucne.myapplication.presentation.estudiantes.list
+package edu.ucne.myapplication.presentation.tipopenalidad.list
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.*
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -15,19 +36,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
-import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
+import edu.ucne.myapplication.domain.estudiantes.model.TipoPenalidad
 
 @Composable
-fun EstudianteListScreen(
-    viewModel: EstudianteListViewModel = hiltViewModel(),
+fun TipoPenalidadListScreen(
+    viewModel: TipoPenalidadListViewModel = hiltViewModel(),
     onDrawer: () -> Unit = {},
     onNavigateToCreate: () -> Unit,
     onNavigateToEdit: (Int) -> Unit
-    ) {
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    EstudianteListBody(
+    TipoPenalidadListBody(
         state = state,
         onEvent = viewModel::onEvent,
         onDrawer = onDrawer,
@@ -36,22 +56,19 @@ fun EstudianteListScreen(
     )
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EstudianteListBody(
-    state: EstudianteListUiState,
-    onEvent: (EstudianteListUiEvent) -> Unit,
+private fun TipoPenalidadListBody(
+    state: TipoPenalidadListUiState,
+    onEvent: (TipoPenalidadListUiEvent) -> Unit,
     onDrawer: () -> Unit,
     onNavigateToCreate: () -> Unit,
     onNavigateToEdit: (Int) -> Unit
-
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Lista de Estudiantes", style = MaterialTheme.typography.titleLarge) },
+                title = { Text("Lista de Penalidades", style = MaterialTheme.typography.titleLarge) },
                 navigationIcon = {
                     IconButton(onClick = onDrawer) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -64,7 +81,7 @@ private fun EstudianteListBody(
                 onClick = onNavigateToCreate,
                 containerColor = Color(0xFFD0BCFF)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar Estudiante")
+                Icon(Icons.Default.Add, contentDescription = "Agregar Penalidad")
             }
         }
     ) { innerPadding ->
@@ -74,9 +91,9 @@ private fun EstudianteListBody(
 
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else if (state.estudiantes.isEmpty()) {
+            } else if (state.tiposPenalidades.isEmpty()) {
                 Text(
-                    text = "No hay estudiantes registrados",
+                    text = "No hay penalidades registradas",
                     modifier = Modifier.align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge
                 )
@@ -86,14 +103,14 @@ private fun EstudianteListBody(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                 ) {
-                    items(state.estudiantes) { estudiante ->
-                        EstudianteItem(
-                            estudiante = estudiante,
+                    items(state.tiposPenalidades) { penalidad ->
+                        TipoPenalidadItem(
+                            penalidad = penalidad,
                             onEdit = {
-                                onNavigateToEdit(estudiante.estudianteId ?: 0)
+                                onNavigateToEdit(penalidad.tipoId ?: 0)
                             },
                             onDelete = {
-                                onEvent(EstudianteListUiEvent.Delete(estudiante.estudianteId ?: 0))
+                                onEvent(TipoPenalidadListUiEvent.Delete(penalidad.tipoId ?: 0))
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -105,8 +122,8 @@ private fun EstudianteListBody(
 }
 
 @Composable
-fun EstudianteItem(
-    estudiante: Estudiante,
+fun TipoPenalidadItem(
+    penalidad: TipoPenalidad,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -126,19 +143,19 @@ fun EstudianteItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = estudiante.nombres,
+                    text = penalidad.nombre,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.DarkGray
                 )
                 Text(
-                    text = "Edad: ${estudiante.edad}",
+                    text = penalidad.descripcion,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
                 Text(
-                    text = estudiante.email,
+                    text = "Puntos: ${penalidad.puntosDescuento}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
+                    color = Color.Red.copy(alpha = 0.7f)
                 )
             }
             Row {
@@ -154,14 +171,14 @@ fun EstudianteItem(
 }
 @Preview(showBackground = true)
 @Composable
-private fun EstudianteListBodyPreview() {
-    val state = EstudianteListUiState(
-        estudiantes = listOf(
-            Estudiante(estudianteId = 1, nombres = "Juan Perez", email = "juan@gmail.com", edad = 20),
-            Estudiante(estudianteId = 2, nombres = "Maria Garcia", email = "maria@gmail.com", edad = 22)
+private fun TipoPenalidadListBodyPreview() {
+    val state = TipoPenalidadListUiState(
+        tiposPenalidades = listOf(
+            TipoPenalidad(tipoId = 1, nombre = "Llegada Tardía", descripcion = "Llegar 15 min tarde", puntosDescuento = 5),
+            TipoPenalidad(tipoId = 2, nombre = "Inasistencia", descripcion = "No asistir a clase", puntosDescuento = 15)
         )
     )
-    EstudianteListBody(
+    TipoPenalidadListBody(
         state = state,
         onEvent = {},
         onDrawer = {},

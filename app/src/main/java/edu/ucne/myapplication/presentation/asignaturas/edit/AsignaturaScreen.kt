@@ -1,21 +1,28 @@
-package edu.ucne.myapplication.presentation.estudiantes
+package edu.ucne.myapplication.presentation.asignaturas.edit
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun EstudianteScreen(
-    viewModel: EstudianteUiViewModel,
+fun AsignaturaScreen(
+    viewModel: AsignaturaViewModel,
     onNavigateBack: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -26,7 +33,7 @@ fun EstudianteScreen(
         }
     }
 
-    EstudianteBody(
+    AsignaturaBody(
         state = state,
         onEvent = viewModel::onEvent
     )
@@ -34,13 +41,13 @@ fun EstudianteScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EstudianteBody(
-    state: EstudianteUiState,
-    onEvent: (EstudianteUiEvent) -> Unit
+private fun AsignaturaBody(
+    state: AsignaturaUiState,
+    onEvent: (AsignaturaUiEvent) -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(title = { Text("Registro de Estudiantes") })
+            TopAppBar(title = { Text("Registro de Asignaturas") })
         }
     ) { padding ->
         Column(
@@ -58,44 +65,53 @@ private fun EstudianteBody(
                         .padding(16.dp)
                 ) {
                     OutlinedTextField(
-                        label = { Text("Nombres") },
-                        value = state.nombres,
-                        onValueChange = { onEvent(EstudianteUiEvent.nombresChanged(it)) },
-                        isError = state.nombresError != null,
+                        label = { Text("Código") },
+                        value = state.codigo,
+                        onValueChange = { onEvent(AsignaturaUiEvent.CodigoChanged(it)) },
+                        isError = state.codigoError != null,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    state.nombresError?.let {
+                    state.codigoError?.let {
                         Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     OutlinedTextField(
-                        label = { Text("Email") },
-                        value = state.email,
-                        onValueChange = { onEvent(EstudianteUiEvent.emailChanged(it)) },
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
-                        isError = state.emailError != null,
+                        label = { Text("Nombre") },
+                        value = state.nombre,
+                        onValueChange = { onEvent(AsignaturaUiEvent.NombreChanged(it)) },
+                        isError = state.nombreError != null,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    state.emailError?.let {
+                    state.nombreError?.let {
                         Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     OutlinedTextField(
-                        label = { Text("Edad") },
-                        value = state.edad?.toString() ?: "",
-                        onValueChange = {
-                            val valor = it.toIntOrNull()
-                            onEvent(EstudianteUiEvent.edadChanged(valor))
-                        },
+                        label = { Text("Aula") },
+                        value = state.aula,
+                        onValueChange = { onEvent(AsignaturaUiEvent.AulaChanged(it)) },
+                        isError = state.aulaError != null,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    state.aulaError?.let {
+                        Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        label = { Text("Créditos") },
+                        value = state.creditos,
+                        onValueChange = { onEvent(AsignaturaUiEvent.CreditosChanged(it)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                        isError = state.edadError != null,
+                        isError = state.creditosError != null,
                         modifier = Modifier.fillMaxWidth()
                     )
-                    state.edadError?.let {
+                    state.creditosError?.let {
                         Text(text = it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                     }
 
@@ -105,13 +121,13 @@ private fun EstudianteBody(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        OutlinedButton(onClick = { onEvent(EstudianteUiEvent.New) }) {
+                        OutlinedButton(onClick = { onEvent(AsignaturaUiEvent.New) }) {
                             Icon(Icons.Default.Add, contentDescription = "Nuevo")
                             Text("Nuevo")
                         }
 
                         Button(
-                            onClick = { onEvent(EstudianteUiEvent.Save) },
+                            onClick = { onEvent(AsignaturaUiEvent.Save) },
                             enabled = !state.isSaving
                         ) {
                             Icon(Icons.Default.Save, contentDescription = "Guardar")
@@ -122,4 +138,20 @@ private fun EstudianteBody(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun AsignaturaBodyPreview() {
+    val state = AsignaturaUiState(
+        asignaturaId = 1,
+        codigo = "AP2-101",
+        nombre = "Aplicada II",
+        aula = "Virtual",
+        creditos = "4",
+        isNew = false
+    )
+    AsignaturaBody(
+        state = state,
+        onEvent = {}
+    )
 }

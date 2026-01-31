@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.estudiantes.list
+package edu.ucne.myapplication.presentation.asignaturas.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,19 +15,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-
-import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
+import edu.ucne.myapplication.domain.estudiantes.model.Asignatura
 
 @Composable
-fun EstudianteListScreen(
-    viewModel: EstudianteListViewModel = hiltViewModel(),
+fun AsignaturaListScreen(
+    viewModel: AsignaturaListViewModel = hiltViewModel(),
     onDrawer: () -> Unit = {},
     onNavigateToCreate: () -> Unit,
     onNavigateToEdit: (Int) -> Unit
-    ) {
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    EstudianteListBody(
+    AsignaturaListBody(
         state = state,
         onEvent = viewModel::onEvent,
         onDrawer = onDrawer,
@@ -36,22 +35,19 @@ fun EstudianteListScreen(
     )
 }
 
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun EstudianteListBody(
-    state: EstudianteListUiState,
-    onEvent: (EstudianteListUiEvent) -> Unit,
+private fun AsignaturaListBody(
+    state: AsignaturaListUiState,
+    onEvent: (AsignaturaListUiEvent) -> Unit,
     onDrawer: () -> Unit,
     onNavigateToCreate: () -> Unit,
     onNavigateToEdit: (Int) -> Unit
-
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Lista de Estudiantes", style = MaterialTheme.typography.titleLarge) },
+                title = { Text("Lista de Asignaturas", style = MaterialTheme.typography.titleLarge) },
                 navigationIcon = {
                     IconButton(onClick = onDrawer) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
@@ -64,7 +60,7 @@ private fun EstudianteListBody(
                 onClick = onNavigateToCreate,
                 containerColor = Color(0xFFD0BCFF)
             ) {
-                Icon(Icons.Default.Add, contentDescription = "Agregar Estudiante")
+                Icon(Icons.Default.Add, contentDescription = "Agregar Asignatura")
             }
         }
     ) { innerPadding ->
@@ -74,9 +70,9 @@ private fun EstudianteListBody(
 
             if (state.isLoading) {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            } else if (state.estudiantes.isEmpty()) {
+            } else if (state.asignaturas.isEmpty()) {
                 Text(
-                    text = "No hay estudiantes registrados",
+                    text = "No hay asignaturas registradas",
                     modifier = Modifier.align(Alignment.Center),
                     style = MaterialTheme.typography.bodyLarge
                 )
@@ -86,14 +82,14 @@ private fun EstudianteListBody(
                         .fillMaxSize()
                         .padding(horizontal = 16.dp)
                 ) {
-                    items(state.estudiantes) { estudiante ->
-                        EstudianteItem(
-                            estudiante = estudiante,
+                    items(state.asignaturas) { asignatura ->
+                        AsignaturaItem(
+                            asignatura = asignatura,
                             onEdit = {
-                                onNavigateToEdit(estudiante.estudianteId ?: 0)
+                                onNavigateToEdit(asignatura.asignaturaId ?: 0)
                             },
                             onDelete = {
-                                onEvent(EstudianteListUiEvent.Delete(estudiante.estudianteId ?: 0))
+                                onEvent(AsignaturaListUiEvent.Delete(asignatura.asignaturaId ?: 0))
                             }
                         )
                         Spacer(modifier = Modifier.height(8.dp))
@@ -105,8 +101,8 @@ private fun EstudianteListBody(
 }
 
 @Composable
-fun EstudianteItem(
-    estudiante: Estudiante,
+fun AsignaturaItem(
+    asignatura: Asignatura,
     onEdit: () -> Unit,
     onDelete: () -> Unit
 ) {
@@ -126,20 +122,27 @@ fun EstudianteItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = estudiante.nombres,
+                    text = asignatura.nombre,
                     style = MaterialTheme.typography.titleMedium,
                     color = Color.DarkGray
                 )
                 Text(
-                    text = "Edad: ${estudiante.edad}",
+                    text = "Código: ${asignatura.codigo}",
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.Gray
                 )
-                Text(
-                    text = estudiante.email,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.Gray
-                )
+                Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Text(
+                        text = "Aula: ${asignatura.aula}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = "Créditos: ${asignatura.creditos}",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                }
             }
             Row {
                 IconButton(onClick = onEdit) {
@@ -154,14 +157,14 @@ fun EstudianteItem(
 }
 @Preview(showBackground = true)
 @Composable
-private fun EstudianteListBodyPreview() {
-    val state = EstudianteListUiState(
-        estudiantes = listOf(
-            Estudiante(estudianteId = 1, nombres = "Juan Perez", email = "juan@gmail.com", edad = 20),
-            Estudiante(estudianteId = 2, nombres = "Maria Garcia", email = "maria@gmail.com", edad = 22)
+private fun AsignaturaListBodyPreview() {
+    val state = AsignaturaListUiState(
+        asignaturas = listOf(
+            Asignatura(asignaturaId = 1, codigo = "MAT-101", nombre = "Matemáticas I", aula = "A-21", creditos = "4"),
+            Asignatura(asignaturaId = 2, codigo = "PRO-202", nombre = "Programación II", aula = "L-05", creditos = "3")
         )
     )
-    EstudianteListBody(
+    AsignaturaListBody(
         state = state,
         onEvent = {},
         onDrawer = {},

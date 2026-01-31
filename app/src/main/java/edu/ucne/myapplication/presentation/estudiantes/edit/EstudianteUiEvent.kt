@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.estudiantes
+package edu.ucne.myapplication.presentation.estudiantes.edit
 
 sealed interface EstudianteUiEvent {
     data class Load(val id: Int?) : EstudianteUiEvent

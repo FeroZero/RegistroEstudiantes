@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.domain.estudiantes.usecase
+package edu.ucne.myapplication.domain.estudiantes.usecase.estudiantes
 
 data class ValidationResult(
     val isValid: Boolean,

@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation("com.google.dagger:hilt-android:2.51")
 
     // Retrofit / Networking
     implementation(libs.retrofit)
