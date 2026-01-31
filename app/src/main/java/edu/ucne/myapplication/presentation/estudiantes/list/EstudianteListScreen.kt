@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -150,4 +151,21 @@ fun EstudianteItem(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun EstudianteListBodyPreview() {
+    val state = EstudianteListUiState(
+        estudiantes = listOf(
+            Estudiante(estudianteId = 1, nombres = "Juan Perez", email = "juan@gmail.com", edad = 20),
+            Estudiante(estudianteId = 2, nombres = "Maria Garcia", email = "maria@gmail.com", edad = 22)
+        )
+    )
+    EstudianteListBody(
+        state = state,
+        onEvent = {},
+        onDrawer = {},
+        onNavigateToCreate = {},
+        onNavigateToEdit = {}
+    )
 }

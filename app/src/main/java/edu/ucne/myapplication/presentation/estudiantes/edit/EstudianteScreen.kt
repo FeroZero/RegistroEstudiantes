@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -121,4 +122,19 @@ private fun EstudianteBody(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun EstudianteBodyPreview() {
+    val state = EstudianteUiState(
+        estudianteId = 1,
+        nombres = "Juan Perez",
+        email = "juan@gmail.com",
+        edad = 20,
+        isNew = false
+    )
+    EstudianteBody(
+        state = state,
+        onEvent = {}
+    )
 }
