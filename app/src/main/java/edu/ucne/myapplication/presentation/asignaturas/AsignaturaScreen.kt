@@ -26,7 +26,6 @@ fun AsignaturaScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
-    // Manejo de navegación tras guardar con éxito
     LaunchedEffect(state.saved, state.deleted) {
         if (state.saved || state.deleted) {
             onNavigateBack()
@@ -64,7 +63,6 @@ private fun AsignaturaBody(
                         .fillMaxWidth()
                         .padding(16.dp)
                 ) {
-                    // Campo Código
                     OutlinedTextField(
                         label = { Text("Código") },
                         value = state.codigo,
@@ -78,7 +76,6 @@ private fun AsignaturaBody(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Campo Nombre
                     OutlinedTextField(
                         label = { Text("Nombre") },
                         value = state.nombre,
@@ -92,7 +89,6 @@ private fun AsignaturaBody(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Campo Aula
                     OutlinedTextField(
                         label = { Text("Aula") },
                         value = state.aula,
@@ -106,7 +102,6 @@ private fun AsignaturaBody(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    // Campo Créditos
                     OutlinedTextField(
                         label = { Text("Créditos") },
                         value = state.creditos,
@@ -121,7 +116,6 @@ private fun AsignaturaBody(
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    // Botones de acción
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
