@@ -8,14 +8,18 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import edu.ucne.myapplication.presentation.asignaturas.AsignaturaScreen
-import edu.ucne.myapplication.presentation.asignaturas.AsignaturaViewModel
+import edu.ucne.myapplication.presentation.asignaturas.edit.AsignaturaScreen
+import edu.ucne.myapplication.presentation.asignaturas.edit.AsignaturaViewModel
 import edu.ucne.myapplication.presentation.asignaturas.list.AsignaturaListScreen
 import edu.ucne.myapplication.presentation.asignaturas.list.AsignaturaListViewModel
-import edu.ucne.myapplication.presentation.estudiantes.EstudianteScreen
-import edu.ucne.myapplication.presentation.estudiantes.EstudianteViewModel
+import edu.ucne.myapplication.presentation.estudiantes.edit.EstudianteScreen
+import edu.ucne.myapplication.presentation.estudiantes.edit.EstudianteViewModel
 import edu.ucne.myapplication.presentation.estudiantes.list.EstudianteListViewModel
 import edu.ucne.myapplication.presentation.estudiantes.list.EstudianteListScreen
+import edu.ucne.myapplication.presentation.tipopenalidad.edit.TipoPenalidadScreen
+import edu.ucne.myapplication.presentation.tipopenalidad.edit.TipoPenalidadViewModel
+import edu.ucne.myapplication.presentation.tipopenalidad.list.TipoPenalidadListScreen
+import edu.ucne.myapplication.presentation.tipopenalidad.list.TipoPenalidadListViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -27,6 +31,7 @@ fun myapplicacionNavHost(
 
     val EstudiantelistViewModel: EstudianteListViewModel = hiltViewModel()
     val AsignaturalistViewModel: AsignaturaListViewModel = hiltViewModel()
+    val TipoPenalidadlistViewModel: TipoPenalidadListViewModel = hiltViewModel()
     DrawerMenu(
         drawerState = drawerState,
         navHostController = navHostController
@@ -81,6 +86,31 @@ fun myapplicacionNavHost(
                 val viewModel: AsignaturaViewModel = hiltViewModel()
 
                 AsignaturaScreen(
+                    viewModel = viewModel,
+                    onNavigateBack = {
+                        viewModel.resetSavedStatus()
+                        navHostController.navigateUp()
+                    },
+                )
+            }
+            composable<Screen.TipoPenalidadList> {
+                TipoPenalidadListScreen(
+                    viewModel = TipoPenalidadlistViewModel,
+                    onNavigateToCreate = {
+                        navHostController.navigate(Screen.TipoPenalidad(0))
+                    },
+                    onDrawer = {
+                        scope.launch { drawerState.open() }
+                    },
+                    onNavigateToEdit = { id ->
+                        navHostController.navigate(Screen.TipoPenalidad(id))
+                    }
+                )
+            }
+            composable<Screen.TipoPenalidad> {
+                val viewModel: TipoPenalidadViewModel = hiltViewModel()
+
+                TipoPenalidadScreen(
                     viewModel = viewModel,
                     onNavigateBack = {
                         viewModel.resetSavedStatus()

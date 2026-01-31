@@ -68,6 +68,15 @@ fun DrawerMenu(
                                 handleItemClick(Screen.AsignaturaList, title)
                             }
                         )
+
+                        DrawerItem(
+                            title = "Tipos de Penalidades",
+                            icon = Icons.Filled.Warning,
+                            isSelected = selectedItem.value == "Tipos de Penalidades",
+                            navigateTo = { title ->
+                                handleItemClick(Screen.TipoPenalidadList, title)
+                            }
+                        )
                     }
                 }
             }
