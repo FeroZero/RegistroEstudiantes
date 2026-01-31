@@ -7,29 +7,52 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
-import edu.ucne.myapplication.presentation.estudiantes.EstudianteUiEvent
-import edu.ucne.myapplication.presentation.estudiantes.EstudianteUiState
+
+@Composable
+fun EstudianteListScreen(
+    viewModel: EstudianteListViewModel = hiltViewModel(),
+    onDrawer: () -> Unit = {},
+    onNavigateToCreate: () -> Unit,
+    onNavigateToEdit: (Int) -> Unit
+    ) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    EstudianteListBody(
+        state = state,
+        onEvent = viewModel::onEvent,
+        onDrawer = onDrawer,
+        onNavigateToCreate = onNavigateToCreate,
+        onNavigateToEdit = onNavigateToEdit
+    )
+}
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EstudianteListScreen(
-    state: EstudianteUiState,
-    onEvent: (EstudianteUiEvent) -> Unit,
-    onEditEstudiante: (Int) -> Unit,
-    onAddEstudiante: () -> Unit
+private fun EstudianteListBody(
+    state: EstudianteListUiState,
+    onEvent: (EstudianteListUiEvent) -> Unit,
+    onDrawer: () -> Unit,
+    onNavigateToCreate: () -> Unit,
+    onNavigateToEdit: (Int) -> Unit
+
 ) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Lista de Estudiantes", style = MaterialTheme.typography.titleLarge) },
                 navigationIcon = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = onDrawer) {
                         Icon(Icons.Default.Menu, contentDescription = "Menu")
                     }
                 }
@@ -37,31 +60,44 @@ fun EstudianteListScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onAddEstudiante,
+                onClick = onNavigateToCreate,
                 containerColor = Color(0xFFD0BCFF)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Agregar Estudiante")
             }
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(horizontal = 16.dp)
-        ) {
-            items(state.estudiantes) { estudiante ->
-                EstudianteItem(
-                    estudiante = estudiante,
-                    onEdit = {
-                        onEditEstudiante(estudiante.estudianteId ?: 0)
-                    },
-                    onDelete = {
-                        onEvent(EstudianteUiEvent.Load(estudiante.estudianteId))
-                        onEvent(EstudianteUiEvent.Delete(estudiante.estudianteId ?: 0))
-                    }
+        Box(modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()) {
+
+            if (state.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else if (state.estudiantes.isEmpty()) {
+                Text(
+                    text = "No hay estudiantes registrados",
+                    modifier = Modifier.align(Alignment.Center),
+                    style = MaterialTheme.typography.bodyLarge
                 )
-                Spacer(modifier = Modifier.height(8.dp))
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp)
+                ) {
+                    items(state.estudiantes) { estudiante ->
+                        EstudianteItem(
+                            estudiante = estudiante,
+                            onEdit = {
+                                onNavigateToEdit(estudiante.estudianteId ?: 0)
+                            },
+                            onDelete = {
+                                onEvent(EstudianteListUiEvent.Delete(estudiante.estudianteId ?: 0))
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                }
             }
         }
     }
@@ -106,18 +142,10 @@ fun EstudianteItem(
             }
             Row {
                 IconButton(onClick = onEdit) {
-                    Icon(
-                        imageVector = Icons.Default.Edit,
-                        contentDescription = "Editar",
-                        tint = Color(0xFF6750A4)
-                    )
+                    Icon(Icons.Default.Edit, "Editar", tint = Color(0xFF6750A4))
                 }
                 IconButton(onClick = onDelete) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Eliminar",
-                        tint = Color(0xFFB3261E)
-                    )
+                    Icon(Icons.Default.Delete, "Eliminar", tint = Color(0xFFB3261E))
                 }
             }
         }
