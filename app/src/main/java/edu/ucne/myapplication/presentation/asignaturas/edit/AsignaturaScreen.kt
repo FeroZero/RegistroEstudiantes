@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.asignaturas
+package edu.ucne.myapplication.presentation.asignaturas.edit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

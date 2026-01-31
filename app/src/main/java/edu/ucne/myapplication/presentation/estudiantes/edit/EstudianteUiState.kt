@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.estudiantes
+package edu.ucne.myapplication.presentation.estudiantes.edit
 
 import edu.ucne.myapplication.domain.estudiantes.model.Estudiante
 

@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.estudiantes
+package edu.ucne.myapplication.presentation.estudiantes.edit
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions

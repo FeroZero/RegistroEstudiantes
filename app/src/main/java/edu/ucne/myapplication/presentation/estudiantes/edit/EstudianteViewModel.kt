@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.estudiantes
+package edu.ucne.myapplication.presentation.estudiantes.edit
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

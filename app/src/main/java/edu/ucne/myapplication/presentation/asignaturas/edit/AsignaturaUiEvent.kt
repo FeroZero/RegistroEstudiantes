@@ -1,4 +1,4 @@
-package edu.ucne.myapplication.presentation.asignaturas
+package edu.ucne.myapplication.presentation.asignaturas.edit
 
 sealed interface AsignaturaUiEvent {
     data class Load(val id: Int) : AsignaturaUiEvent
