@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TipoPenalidadScreen(
@@ -141,4 +142,19 @@ private fun TipoPenalidadBody(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun TipoPenalidadBodyPreview() {
+    val state = TipoPenalidadUiState(
+        tipoId = 1,
+        nombre = "Llegada Tardía",
+        descripcion = "El estudiante llegó después de la hora permitida",
+        puntosDescuento = 10,
+        isNew = false
+    )
+    TipoPenalidadBody(
+        state = state,
+        onEvent = {}
+    )
 }

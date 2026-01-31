@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -167,4 +168,21 @@ fun TipoPenalidadItem(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun TipoPenalidadListBodyPreview() {
+    val state = TipoPenalidadListUiState(
+        tiposPenalidades = listOf(
+            TipoPenalidad(tipoId = 1, nombre = "Llegada Tardía", descripcion = "Llegar 15 min tarde", puntosDescuento = 5),
+            TipoPenalidad(tipoId = 2, nombre = "Inasistencia", descripcion = "No asistir a clase", puntosDescuento = 15)
+        )
+    )
+    TipoPenalidadListBody(
+        state = state,
+        onEvent = {},
+        onDrawer = {},
+        onNavigateToCreate = {},
+        onNavigateToEdit = {}
+    )
 }
