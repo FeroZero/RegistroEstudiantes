@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
@@ -137,4 +138,20 @@ private fun AsignaturaBody(
             }
         }
     }
+}
+@Preview(showBackground = true)
+@Composable
+private fun AsignaturaBodyPreview() {
+    val state = AsignaturaUiState(
+        asignaturaId = 1,
+        codigo = "AP2-101",
+        nombre = "Aplicada II",
+        aula = "Virtual",
+        creditos = "4",
+        isNew = false
+    )
+    AsignaturaBody(
+        state = state,
+        onEvent = {}
+    )
 }
