@@ -1,49 +1,93 @@
 package edu.ucne.myapplication.presentation.navigation
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import edu.ucne.myapplication.presentation.asignaturas.AsignaturaScreen
+import edu.ucne.myapplication.presentation.asignaturas.AsignaturaViewModel
+import edu.ucne.myapplication.presentation.asignaturas.list.AsignaturaListScreen
+import edu.ucne.myapplication.presentation.asignaturas.list.AsignaturaListViewModel
 import edu.ucne.myapplication.presentation.estudiantes.EstudianteScreen
-import edu.ucne.myapplication.presentation.estudiantes.EstudianteUiViewModel
+import edu.ucne.myapplication.presentation.estudiantes.EstudianteViewModel
+import edu.ucne.myapplication.presentation.estudiantes.list.EstudianteListViewModel
 import edu.ucne.myapplication.presentation.estudiantes.list.EstudianteListScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun myapplicacionNavHost(
     navHostController: NavHostController
 ) {
-    val viewModel: EstudianteUiViewModel = hiltViewModel()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
-    val state by viewModel.state.collectAsStateWithLifecycle()
-    NavHost(
-        navController = navHostController,
-        startDestination = Screen.EstudianteList
+    val EstudiantelistViewModel: EstudianteListViewModel = hiltViewModel()
+    val AsignaturalistViewModel: AsignaturaListViewModel = hiltViewModel()
+    DrawerMenu(
+        drawerState = drawerState,
+        navHostController = navHostController
     ) {
-        composable<Screen.EstudianteList>{
-            EstudianteListScreen(
-                onAddEstudiante = {
-                    navHostController.navigate(Screen.Estudiante(0))
-                },
-                onEditEstudiante = { id ->
-                    navHostController.navigate(Screen.Estudiante(id))
-                },
-                onEvent = { event ->
-                    viewModel.onEvent(event)
-                },
-                state = state
-            )
-        }
+        NavHost(
+            navController = navHostController,
+            startDestination = Screen.EstudianteList
+        ) {
+            composable<Screen.EstudianteList> {
+                EstudianteListScreen(
+                    viewModel = EstudiantelistViewModel,
+                    onNavigateToCreate = {
+                        navHostController.navigate(Screen.Estudiante(0))
+                    },
+                    onDrawer = {
+                        scope.launch { drawerState.open() }
+                    },
+                    onNavigateToEdit = { id ->
+                        navHostController.navigate(Screen.Estudiante(id))
+                    }
+                )
+            }
 
-        composable<Screen.Estudiante> {
-            EstudianteScreen(
-                viewModel = viewModel,
-                onNavigateBack = {
-                    navHostController.navigateUp()
-                },
-            )
+            composable<Screen.Estudiante> {
+                val viewModel: EstudianteViewModel = hiltViewModel()
+
+
+                EstudianteScreen(
+                    viewModel = viewModel,
+                    onNavigateBack = {
+                        viewModel.resetSavedStatus()
+                        navHostController.navigateUp()
+                    },
+                )
+            }
+
+            composable<Screen.AsignaturaList> {
+                AsignaturaListScreen(
+                    viewModel = AsignaturalistViewModel,
+                    onNavigateToCreate = {
+                        navHostController.navigate(Screen.Asignatura(0))
+                    },
+                    onDrawer = {
+                        scope.launch { drawerState.open() }
+                    },
+                    onNavigateToEdit = { id ->
+                        navHostController.navigate(Screen.Asignatura(id))
+                    }
+                )
+            }
+            composable<Screen.Asignatura> {
+                val viewModel: AsignaturaViewModel = hiltViewModel()
+
+                AsignaturaScreen(
+                    viewModel = viewModel,
+                    onNavigateBack = {
+                        viewModel.resetSavedStatus()
+                        navHostController.navigateUp()
+                    },
+                )
+            }
         }
     }
 }

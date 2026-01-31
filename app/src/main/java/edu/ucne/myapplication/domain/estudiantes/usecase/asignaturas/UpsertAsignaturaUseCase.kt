@@ -8,22 +8,22 @@ class UpsertAsignaturaUseCase @Inject constructor(
     private val repository: AsignaturaRepository
 ) {
     suspend operator fun invoke(asignatura: Asignatura): Result<Int> {
-        val codigoResult = validateCodigo(asignatura.Codigo)
+        val codigoResult = validateCodigo(asignatura.codigo)
         if (!codigoResult.isValid) {
             return Result.failure(IllegalArgumentException(codigoResult.errorMessage))
         }
 
-        val nombreResult = validateNombreAsignatura(asignatura.Nombre)
+        val nombreResult = validateNombreAsignatura(asignatura.nombre)
         if (!nombreResult.isValid) {
             return Result.failure(IllegalArgumentException(nombreResult.errorMessage))
         }
 
-        val aulaResult = validateAula(asignatura.Aula)
+        val aulaResult = validateAula(asignatura.aula)
         if (!aulaResult.isValid) {
             return Result.failure(IllegalArgumentException(aulaResult.errorMessage))
         }
 
-        val creditosResult = validateCreditos(asignatura.Creditos)
+        val creditosResult = validateCreditos(asignatura.creditos)
         if (!creditosResult.isValid) {
             return Result.failure(IllegalArgumentException(creditosResult.errorMessage))
         }
