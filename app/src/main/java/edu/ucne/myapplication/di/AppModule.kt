@@ -11,8 +11,10 @@ import dagger.hilt.components.SingletonComponent
 import edu.ucne.myapplication.data.estudiantes.local.database.EstudianteDb
 import edu.ucne.myapplication.data.estudiantes.local.repositoryimpl.AsignaturaRepositoryImpl
 import edu.ucne.myapplication.data.estudiantes.local.repositoryimpl.EstudianteRepositoryImpl
+import edu.ucne.myapplication.data.estudiantes.local.repositoryimpl.TipoPenalidadRepositoryImpl
 import edu.ucne.myapplication.domain.estudiantes.repository.AsignaturaRepository
 import edu.ucne.myapplication.domain.estudiantes.repository.EstudianteRepository
+import edu.ucne.myapplication.domain.estudiantes.repository.TipoPenalidadRepository
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -34,6 +36,8 @@ abstract class AppModule {
         fun provideEstudianteDao(db: EstudianteDb) = db.estudianteDao()
         @Provides
         fun provideAsignaturaDao(db: EstudianteDb) = db.asignaturaDao()
+        @Provides
+        fun provideTipoPenalidadDao(db: EstudianteDb) = db.tipoPenalidadDao()
     }
     @Binds
     @Singleton
@@ -46,6 +50,12 @@ abstract class AppModule {
     abstract fun bindAsignaturaRepository(
         impl: AsignaturaRepositoryImpl
     ): AsignaturaRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindTipoPenalidadRepository(
+        impl: TipoPenalidadRepositoryImpl
+    ): TipoPenalidadRepository
 }
 
 
