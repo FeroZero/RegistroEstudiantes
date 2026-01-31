@@ -4,17 +4,17 @@ import edu.ucne.myapplication.data.estudiantes.local.entities.AsignaturaEntity
 import edu.ucne.myapplication.domain.estudiantes.model.Asignatura
 
 fun AsignaturaEntity.toDomain(): Asignatura = Asignatura(
-     AsignaturaId = AsignaturaId,
-     Codigo = Codigo,
-     Nombre = Nombre,
-     Aula = Aula,
-     Creditos = Creditos,
+     asignaturaId = AsignaturaId,
+     codigo = Codigo,
+     nombre = Nombre,
+     aula = Aula,
+     creditos = Creditos,
 )
 
 fun Asignatura.toEntity(): AsignaturaEntity = AsignaturaEntity(
-    AsignaturaId = AsignaturaId,
-    Codigo = Codigo,
-    Nombre = Nombre,
-    Aula = Aula,
-    Creditos = Creditos,
+    AsignaturaId = asignaturaId,
+    Codigo = codigo,
+    Nombre = nombre,
+    Aula = aula,
+    Creditos = creditos,
 )
